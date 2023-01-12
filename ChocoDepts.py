@@ -3,7 +3,7 @@ import tkinter
 from xml.etree import ElementTree
 from tkinter import Tk, Canvas, Frame, BOTH, ALL, CENTER
 import glob
-import random
+import re
 
 
 def draw_arrow(canvas, from_x, from_y, to_x, to_y):
@@ -97,8 +97,8 @@ class NuspecToNodes:
 
             identifier = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}id'.format(namespace)).text
             node = Node(identifier)
-            # TODO add linebreak if label is longer than N chars
             node.label = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}title'.format(namespace)).text
+
             dependencies = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}dependencies'.format(namespace))
             if dependencies:
                 for dependency in dependencies.findall('{{{}}}dependency'.format(namespace)):
@@ -129,9 +129,14 @@ class NuspecToNodes:
 
             self.nodes[i].coordinate = Coordinate(xi, yi)
 
+    def update_node_labels(self):
+        for node in self.nodes:
+            node.label = re.sub("(.{15})", "\\1\n", node.label, 0, re.DOTALL)
+
     def get_nodes(self):
         self.read_nodes_from_xml()
         self.update_node_locations()
+        self.update_node_labels()
         return self.nodes
 
 
