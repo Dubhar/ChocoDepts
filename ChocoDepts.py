@@ -1,10 +1,12 @@
-from operator import attrgetter
-import math
-import tkinter
-from xml.etree import ElementTree
-from tkinter import Tk, Canvas, Frame, BOTH, ALL, CENTER
 import glob
+import math
 import re
+import tkinter
+from operator import attrgetter
+from tkinter import Tk, Canvas, Frame, BOTH, ALL, CENTER
+from xml.etree import ElementTree
+
+from colour import Color
 
 
 def draw_arrow(canvas, from_x, from_y, to_x, to_y):
@@ -59,9 +61,14 @@ class ChocoDepts(Frame):
                 return matches[0]
             print("dependency {} not found/installed/unique!".format(identifier))
 
+        # prepare color palette
+        max_connection_count = max(node.connection_count for node in nodes)
+        red = Color("green")
+        colors = list(red.range_to(Color("red"), max_connection_count+1))
+
         for node in nodes:
-            self.canvas.create_text(node.coordinate.x, node.coordinate.y, font="Sans 12", text=node.label,
-                                    justify=CENTER)
+            self.canvas.create_text(node.coordinate.x, node.coordinate.y, fill=colors[node.connection_count],
+                                    font="Sans 12", text=node.label, justify=CENTER)
             for dependency in node.dependencies:
                 dependency_node = get_node_by_id(dependency)
                 if dependency_node:
