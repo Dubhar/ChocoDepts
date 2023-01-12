@@ -1,3 +1,4 @@
+from operator import attrgetter
 import math
 import tkinter
 from xml.etree import ElementTree
@@ -53,7 +54,7 @@ class ChocoDepts(Frame):
     def draw_directed_graph(self, nodes):
 
         def get_node_by_id(identifier):
-            matches = [n for n in nodes if n.id.lower() == identifier.lower()]
+            matches = [n for n in nodes if n.id == identifier]
             if len(matches) == 1:
                 return matches[0]
             print("dependency {} not found/installed/unique!".format(identifier))
@@ -95,7 +96,7 @@ class NuspecToNodes:
             root = dom.getroot()
             namespace = root.tag.split('}')[0].strip('{')
 
-            identifier = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}id'.format(namespace)).text
+            identifier = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}id'.format(namespace)).text.lower()
             node = Node(identifier)
             node.label = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}title'.format(namespace)).text
 
@@ -106,9 +107,27 @@ class NuspecToNodes:
                     #  i.e. create placeholder using only the identifier if a node doesnt exist.
                     #  then reference the new node. this approach allows to color dead dependencies
                     #  (those who have no attributes but the identifier, which should never happen so it's pointless?!)
-                    dependency_id = dependency.attrib.get('id')
+                    dependency_id = dependency.attrib.get('id').lower()
                     node.dependencies.append(dependency_id)
             self.nodes.append(node)
+
+    def order_nodes_by_dependency_count(self):
+        # add connection count
+        for node in self.nodes:
+            node.connection_count = 0
+
+            # outgoing
+            node.connection_count += len(node.dependencies)
+
+            # incoming
+            for other_node in self.nodes:
+                if node == other_node:
+                    continue
+                for dependency in other_node.dependencies:
+                    if dependency == node.id:
+                        node.connection_count += 1
+        # sort
+        self.nodes.sort(key=attrgetter('connection_count'), reverse=True)
 
     def update_node_locations(self):
         # spiral parameters depend on number of nodes
@@ -135,6 +154,7 @@ class NuspecToNodes:
 
     def get_nodes(self):
         self.read_nodes_from_xml()
+        self.order_nodes_by_dependency_count()
         self.update_node_locations()
         self.update_node_labels()
         return self.nodes
