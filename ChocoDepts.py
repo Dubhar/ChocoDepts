@@ -1,5 +1,6 @@
 import glob
 import math
+import os
 import re
 import tkinter
 from operator import attrgetter
@@ -96,8 +97,9 @@ class NuspecToNodes:
         self.nodes = []
 
     def read_nodes_from_xml(self):
-
-        paths = glob.glob('C:\\ProgramData\\chocolatey\\lib\\*\\*.nuspec')
+        install_dir = os.environ['ChocolateyInstall']
+        regex = os.path.join(install_dir, 'lib', '*', '*.nuspec')
+        paths = glob.glob(regex)
         for path in paths:
             dom = ElementTree.parse(path)
             root = dom.getroot()
