@@ -1,22 +1,20 @@
-# prerequirements
-if using PyCharm, you need to install the following python packages to your venv:
-* py2exe
+# Install
 
-# build executable
+* download latest zip (see "Releases")
+* extract zip to `C:\Program Files\ChocoDepts`
+* open `C:\Program Files\ChocoDepts` in explorer
+* right-click `ChocoDepts.exe` and click `Send to` ➜ `Shortcut on Desktop`
+
+# Build it from source
 ```shell
+# get source code
+git clone https://github.com/Dubhar/ChocoDepts.git
+
+# build the exe
+cd ChocoDepts
 python.exe .\setup.py py2exe
-```
 
-# install the executable
-```shell
+# install
 Move-Item .\dist 'C:\Program Files\ChocoDepts'
 ```
-
-
-# run the program
-```shell
-cd 'c:\Program Files\ChocoDepts'
-.\ChocoDept.exe
-```
-For simplification you may want to right-click the executable and select
-`Send to` ➜ `Shortcut on Desktop`
+now you can create a shortcut, see regular install above 

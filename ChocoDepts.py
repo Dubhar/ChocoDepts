@@ -1,3 +1,4 @@
+import math
 import tkinter
 from xml.etree import ElementTree
 from tkinter import Tk, Canvas, Frame, BOTH, ALL, CENTER
@@ -110,9 +111,23 @@ class NuspecToNodes:
             self.nodes.append(node)
 
     def update_node_locations(self):
-        # TODO order nodes by using dependencies as neighbors and assigning matching coordinates
-        for node in self.nodes:
-            node.coordinate = Coordinate(random.randint(10, 700), random.randint(10, 300))
+        # spiral parameters depend on number of nodes
+        node_count = len(self.nodes)
+        vert_spacing = 10 * node_count
+        horz_spacing = 10 * node_count
+        theta_max = node_count * math.pi
+
+        # constants
+        b = vert_spacing / 2 / math.pi
+        smax = 0.5 * b * theta_max * theta_max
+
+        for i in range(len(self.nodes)):
+            s = (smax / horz_spacing) * i
+            theta_i = math.sqrt(2 * s / b)
+            xi = b * theta_i * math.cos(theta_i)
+            yi = b * theta_i * math.sin(theta_i)
+
+            self.nodes[i].coordinate = Coordinate(xi, yi)
 
     def get_nodes(self):
         self.read_nodes_from_xml()
