@@ -182,7 +182,7 @@ def main():
     x_coordinate = int((root.winfo_screenwidth() / 2) - (window_width / 2))
     y_coordinate = int((root.winfo_screenheight() / 2) - (window_height / 2))
     root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_coordinate, y_coordinate))
-    root.title("ChocoDepts")
+    root.title("ChocoDepts v0.0.1")
     root.mainloop()
 
 
