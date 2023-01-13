@@ -65,7 +65,7 @@ class ChocoDepts(Frame):
         # prepare color palette
         max_connection_count = max(node.connection_count for node in nodes)
         red = Color("green")
-        colors = list(red.range_to(Color("red"), max_connection_count+1))
+        colors = list(red.range_to(Color("red"), max_connection_count + 1))
 
         for node in nodes:
             font = "Sans 12 bold underline" if node.is_leaf else "Sans 12"
@@ -113,10 +113,6 @@ class NuspecToNodes:
             dependencies = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}dependencies'.format(namespace))
             if dependencies:
                 for dependency in dependencies.findall('{{{}}}dependency'.format(namespace)):
-                    # TODO question whether id string or reference should be used:
-                    #  i.e. create placeholder using only the identifier if a node doesnt exist.
-                    #  then reference the new node. this approach allows to color dead dependencies
-                    #  (those who have no attributes but the identifier, which should never happen so it's pointless?!)
                     dependency_id = dependency.attrib.get('id').lower()
                     node.dependencies.append(dependency_id)
             self.nodes.append(node)
