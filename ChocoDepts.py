@@ -1,8 +1,8 @@
 import glob
 import os
 import re
+import webbrowser
 
-import webview
 from colour import Color
 from defusedxml import ElementTree
 from pyvis.network import Network
@@ -97,21 +97,20 @@ class NuspecToNodes:
         return self.nodes
 
 
-def load_html(window):
-    g = Network(height='800px', width='600px')
+def create_html():
+    g = Network(height='600px', width='100%', heading="ChocoDepts v0.0.1")
     g.toggle_physics(True)
 
     nn = NuspecToNodes()
     nodes = nn.get_nodes()
     draw_directed_graph(g, nodes)
 
-    html = g.generate_html('chocodepts.html')
-    window.load_html(html)
+    g.save_graph('chocodepts.html')
 
 
 def main():
-    window = webview.create_window('ChocoDepts v0.0.1', html='Loading')
-    webview.start(load_html, window)
+    create_html()
+    webbrowser.open('chocodepts.html')
 
 
 if __name__ == '__main__':
