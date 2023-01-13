@@ -98,22 +98,32 @@ class NuspecToNodes:
         return self.nodes
 
 
-def load_html(window):
-    g = Network(height='800px', width='600px')
-    g.toggle_physics(True)
+class Main:
+    def __init__(self):
+        nn = NuspecToNodes()
+        self.nodes = nn.get_nodes()
 
-    nn = NuspecToNodes()
-    nodes = nn.get_nodes()
-    draw_directed_graph(g, nodes)
+        self.g = Network(width='100%', height='550px')
+        self.g.toggle_physics(True)
 
-    html = g.generate_html('chocodepts.html')
-    window.load_html(html)
+        self.window = webview.create_window('ChocoDepts v0.0.1', html='Loading', width=800, height=600)
+        self.window.events.resized += self.on_resized
 
+        def load_html(window):
+            self.update_html()
 
-def main():
-    window = webview.create_window('ChocoDepts v0.0.1', html='Loading')
-    webview.start(load_html, window)
+        webview.start(load_html, self.window)
+
+    def update_html(self):
+        draw_directed_graph(self.g, self.nodes)
+        html = self.g.generate_html('chocodepts.html')
+        self.window.load_html(html)
+
+    def on_resized(self, width, height):
+        self.g.width = '100%'
+        self.g.height = height - 50
+        self.update_html()
 
 
 if __name__ == '__main__':
-    main()
+    Main()
