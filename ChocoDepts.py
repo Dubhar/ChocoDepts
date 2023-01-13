@@ -21,14 +21,14 @@ def draw_directed_graph(graph, nodes):
     colors = list(red.range_to(Color("#FF0000"), max_connection_count + 1))
 
     for node in nodes:
-        graph.add_node(node.label, color=colors[node.connection_count].hex)
+        graph.add_node(node.label, color=colors[node.connection_count].hex, title=node.version)
         # font = "Sans 12 bold underline" if node.is_leaf else "Sans 12"
 
     for node in nodes:
         for dependency in node.dependencies:
             dependency_node = get_node_by_id(dependency)
             if dependency_node:
-                graph.add_edge(node.label, dependency_node.label)
+                graph.add_edge(node.label, dependency_node.label, color='black')
 
 
 class Coordinate:
@@ -65,6 +65,7 @@ class NuspecToNodes:
             identifier = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}id'.format(namespace)).text.lower()
             node = Node(identifier)
             node.label = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}title'.format(namespace)).text
+            node.version = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}version'.format(namespace)).text
 
             dependencies = dom.find('{{{}}}metadata'.format(namespace)).find('{{{}}}dependencies'.format(namespace))
             if dependencies:
