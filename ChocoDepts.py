@@ -68,8 +68,9 @@ class ChocoDepts(Frame):
         colors = list(red.range_to(Color("red"), max_connection_count+1))
 
         for node in nodes:
+            font = "Sans 12 bold underline" if node.is_leaf else "Sans 12"
             self.canvas.create_text(node.coordinate.x, node.coordinate.y, fill=colors[node.connection_count],
-                                    font="Sans 12", text=node.label, justify=CENTER)
+                                    font=font, text=node.label, justify=CENTER)
             for dependency in node.dependencies:
                 dependency_node = get_node_by_id(dependency)
                 if dependency_node:
@@ -129,12 +130,14 @@ class NuspecToNodes:
             node.connection_count += len(node.dependencies)
 
             # incoming
+            node.is_leaf = True
             for other_node in self.nodes:
                 if node == other_node:
                     continue
                 for dependency in other_node.dependencies:
                     if dependency == node.id:
                         node.connection_count += 1
+                        node.is_leaf = False
         # sort
         self.nodes.sort(key=attrgetter('connection_count'), reverse=True)
 
