@@ -5,7 +5,7 @@ import re
 import tkinter
 from operator import attrgetter
 from tkinter import Tk, Canvas, Frame, BOTH, ALL, CENTER
-from xml.etree import ElementTree
+from defusedxml import ElementTree
 
 from colour import Color
 
@@ -102,7 +102,10 @@ class NuspecToNodes:
         regex = os.path.join(install_dir, 'lib', '*', '*.nuspec')
         paths = glob.glob(regex)
         for path in paths:
-            dom = ElementTree.parse(path)
+            try:
+                dom = ElementTree.parse(path)
+            except SyntaxError as se:
+                raise se
             root = dom.getroot()
             namespace = root.tag.split('}')[0].strip('{')
 
