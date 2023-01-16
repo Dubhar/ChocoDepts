@@ -1,0 +1,7 @@
+# PyCharm
+.idea/
+venv/
+
+# py2exe files
+build/
+dist/
