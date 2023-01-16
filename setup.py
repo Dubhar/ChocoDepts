@@ -1,8 +1,9 @@
-from distutils.core import setup
-import py2exe
+from py2exe import freeze
 
-setup(
-    options={'py2exe': {'bundle_files': 1, 'compressed': True}},
+freeze(
     windows=[{'script': 'ChocoDepts.py'}],
-    zipfile=None,
+    data_files=None,
+    zipfile='library.zip',
+    options={'includes': ['pygments']},
+    version_info={}
 )

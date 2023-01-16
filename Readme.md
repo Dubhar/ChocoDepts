@@ -12,7 +12,8 @@ git clone https://github.com/Dubhar/ChocoDepts.git
 
 # build the exe
 cd ChocoDepts
-python.exe .\setup.py py2exe
+pip install -r requirements.txt
+python.exe .\setup.py py2exe.freeze
 
 # install
 Move-Item .\dist 'C:\Program Files\ChocoDepts'
