@@ -5,3 +5,4 @@ defusedxml~=0.7.1
 pyvis~=0.3.1
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
 ipython>=8.10.0 # not directly required, pinned by Snyk to avoid a vulnerability
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
