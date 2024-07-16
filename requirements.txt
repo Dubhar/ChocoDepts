@@ -3,5 +3,5 @@ pywebview~=3.7.2
 colour~=0.1.5
 defusedxml~=0.7.1
 pyvis~=0.3.1
-setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
 ipython>=8.10.0 # not directly required, pinned by Snyk to avoid a vulnerability
